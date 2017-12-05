@@ -13,7 +13,7 @@ func init() {
 	dbpasswd := beego.AppConfig.String("mysql.pass")
 	dbname := beego.AppConfig.String("mysql.dbname")
 
-	conn := dbuser + ":" + dbpasswd + "@tcp(" + dbhost + ":" + dbport + ")/" + dbname + "?charset=utf8"
+	conn := dbuser + ":" + dbpasswd + "@tcp(" + dbhost + ":" + dbport + ")/" + dbname + "?charset=utf8&loc=Local"
 	orm.RegisterDriver("mysql", orm.DRMySQL)
 	orm.RegisterDataBase("default", "mysql", conn)
 }
