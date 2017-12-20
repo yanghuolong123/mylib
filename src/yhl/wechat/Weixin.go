@@ -8,7 +8,6 @@ import (
 	"github.com/astaxie/beego/httplib"
 	"io"
 	"sort"
-	//	"strconv"
 	"strings"
 	"time"
 	"yhl/help"
@@ -101,6 +100,42 @@ func GetWxUserinfo(openid, lang string) (m map[string]interface{}) {
 	req := httplib.Get(url)
 	m = make(map[string]interface{})
 	req.ToJSON(&m)
+
+	return
+}
+
+func GetQrCodeImg(m map[string]interface{}) (imgUrl string) {
+	url := ApiUrl + "/cgi-bin/qrcode/create?access_token=" + GetAccessToken()
+	req := httplib.Post(url)
+	req.JSONBody(m)
+	data := make(map[string]interface{})
+	req.ToJSON(&data)
+
+	if v, ok := data["ticket"]; ok {
+		imgUrl = "https://mp.weixin.qq.com/cgi-bin/showqrcode?ticket=" + v.(string)
+	}
+
+	return
+}
+
+func GetTmpStrQrImg(sceneStr string) (imgUrl string) {
+	cache := help.Cache
+	t := cache.Get("qr_img_" + sceneStr)
+	if t != nil {
+		imgUrl = string(t.([]uint8))
+		return
+	}
+
+	expire := 1800
+	m := map[string]interface{}{}
+	m["action_name"] = "QR_STR_SCENE"
+	m["action_info"] = map[string]interface{}{"scene": map[string]string{"scene_str": sceneStr}}
+	m["expire_seconds"] = expire
+
+	imgUrl = GetQrCodeImg(m)
+	if len(imgUrl) > 0 {
+		cache.Put("qr_img_"+sceneStr, imgUrl, time.Duration(expire)*time.Second)
+	}
 
 	return
 }
