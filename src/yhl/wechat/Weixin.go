@@ -78,8 +78,9 @@ func GetAccessToken() (token string) {
 func SendMsg(m map[string]interface{}) {
 	url := ApiUrl + "/cgi-bin/message/custom/send?access_token=" + GetAccessToken()
 	req := httplib.Post(url)
-	fmt.Println(m)
+	//fmt.Println(m)
 	req.JSONBody(m)
+	req.String()
 	//fmt.Println(req.String())
 }
 
@@ -90,4 +91,16 @@ func SendTextMsg(touser, content string) {
 	m["text"] = map[string]string{"content": content}
 
 	SendMsg(m)
+}
+
+func GetWxUserinfo(openid, lang string) (m map[string]interface{}) {
+	if lang == "" {
+		lang = "zh_CN"
+	}
+	url := ApiUrl + "/cgi-bin/user/info?access_token=" + GetAccessToken() + "&openid=" + openid + "&lang=" + lang
+	req := httplib.Get(url)
+	m = make(map[string]interface{})
+	req.ToJSON(&m)
+
+	return
 }
