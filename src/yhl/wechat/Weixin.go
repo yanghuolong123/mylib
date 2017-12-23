@@ -63,7 +63,7 @@ func GetAccessToken() (token string) {
 	b := httplib.Get(url)
 	data := make(map[string]interface{})
 	b.ToJSON(&data)
-	//fmt.Println(data)
+	fmt.Println(data)
 
 	if v, ok := data["access_token"]; ok {
 		token = v.(string)
