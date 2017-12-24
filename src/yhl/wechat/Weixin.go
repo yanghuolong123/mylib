@@ -37,6 +37,8 @@ type MsgBody struct {
 	MsgType      string
 	Content      string
 	MsgId        int
+	Event        string
+	EventKey     string
 }
 
 func Check(timestamp, nonce, signatureIn string) bool {
