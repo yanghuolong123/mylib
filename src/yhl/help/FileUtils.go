@@ -9,3 +9,11 @@ func PathExist(pathName string) bool {
 
 	return !os.IsNotExist(err)
 }
+
+func MkDirPath(pathRoute string) error {
+	if !PathExist(pathRoute) {
+		return os.MkdirAll(pathRoute, os.ModePerm)
+	}
+
+	return nil
+}
