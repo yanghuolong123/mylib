@@ -1,6 +1,7 @@
 package help
 
 import (
+	"fmt"
 	"time"
 )
 
@@ -17,4 +18,40 @@ func Date() (year, month, day int) {
 
 	return
 
+}
+
+func ShowTime(t time.Time) (s string) {
+	now := time.Now()
+	if t.After(now) {
+		return
+	}
+
+	du := time.Since(t) / time.Second
+
+	y := time.Duration(365 * 24 * 60 * 60)
+	if du > y {
+		return fmt.Sprintf("%d年前", du/y)
+	}
+
+	m := time.Duration(30 * 24 * 60 * 60)
+	if du > m {
+		return fmt.Sprintf("%d月前", du/m)
+	}
+
+	d := time.Duration(24 * 60 * 60)
+	if du > d {
+		return fmt.Sprintf("%d天前", du/d)
+	}
+
+	h := time.Duration(60 * 60)
+	if du > h {
+		return fmt.Sprintf("%d小时前", du/h)
+	}
+
+	min := time.Duration(60)
+	if du > min {
+		return fmt.Sprintf("%d分钟前", du/min)
+	}
+
+	return fmt.Sprintf("%d秒前", du)
 }
