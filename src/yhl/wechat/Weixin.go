@@ -141,3 +141,21 @@ func GetTmpStrQrImg(sceneStr string) (imgUrl string) {
 
 	return
 }
+
+func GetShortUrl(urlLong string) (urlShort string) {
+	m := map[string]string{}
+	m["action"] = "long2short"
+	m["long_url"] = urlLong
+
+	url := ApiUrl + "/cgi-bin/shorturl?access_token=" + GetAccessToken()
+	req := httplib.Post(url)
+	req.JSONBody(m)
+	data := make(map[string]interface{})
+	req.ToJSON(&data)
+
+	if v, ok := data["short_url"]; ok {
+		urlShort = v.(string)
+	}
+
+	return
+}
