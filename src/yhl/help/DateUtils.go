@@ -53,5 +53,9 @@ func ShowTime(t time.Time) (s string) {
 		return fmt.Sprintf("%d分钟前", du/min)
 	}
 
+	if du <= 0 {
+		return "1秒前"
+	}
+
 	return fmt.Sprintf("%d秒前", du)
 }

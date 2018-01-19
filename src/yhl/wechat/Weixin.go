@@ -142,6 +142,28 @@ func GetTmpStrQrImg(sceneStr string) (imgUrl string) {
 	return
 }
 
+func GetPermanentStrQrImg(sceneStr string) (imgUrl string) {
+	cache := help.Cache
+	t := cache.Get("qr_img_" + sceneStr)
+	if t != nil {
+		imgUrl = string(t.([]uint8))
+		return
+	}
+
+	expire := 30 * 24 * 3600
+	m := map[string]interface{}{}
+	m["action_name"] = "QR_LIMIT_STR_SCENE"
+	m["action_info"] = map[string]interface{}{"scene": map[string]string{"scene_str": sceneStr}}
+	m["expire_seconds"] = expire
+
+	imgUrl = GetQrCodeImg(m)
+	if len(imgUrl) > 0 {
+		cache.Put("qr_img_"+sceneStr, imgUrl, time.Duration(expire)*time.Second)
+	}
+
+	return
+}
+
 func GetShortUrl(urlLong string) (urlShort string) {
 	m := map[string]string{}
 	m["action"] = "long2short"
