@@ -1,0 +1,5 @@
+package wxpay
+
+import (
+	"fmt"
+)
