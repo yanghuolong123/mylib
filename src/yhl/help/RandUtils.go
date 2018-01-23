@@ -1,6 +1,7 @@
 package help
 
 import (
+	"github.com/astaxie/beego/utils"
 	"math/rand"
 )
 
@@ -10,4 +11,8 @@ func RandNum(min, max int) int {
 	}
 
 	return rand.Intn(max-min) + min
+}
+
+func RandStr(n int) string {
+	return string(utils.RandomCreateBytes(n))
 }

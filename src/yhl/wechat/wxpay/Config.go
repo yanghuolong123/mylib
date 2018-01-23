@@ -1,7 +1,6 @@
 package wxpay
 
 import (
-	"fmt"
 	"github.com/astaxie/beego"
 )
 
