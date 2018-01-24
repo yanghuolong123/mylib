@@ -19,6 +19,11 @@ type UnifyOrderReq struct {
 	Out_trade_no     string `xml:"out_trade_no"`     //商户订单号
 	Sign             string `xml:"sign"`             //签名
 	Openid           string `xml:"openid"`           //购买商品的用户wxid
+	Product_id       int    `xml:"product_id"`       // 商品id
+	Attach           string `xml:"attach"`           //
+	Goods_tag        string `xml:"goods_tag"`        //
+	Time_start       string `xml:"time_start"`
+	Time_expire      string `xml:"time_expire"`
 }
 
 func Sign(m map[string]interface{}) string {

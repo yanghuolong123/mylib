@@ -2,10 +2,24 @@ package help
 
 import (
 	"github.com/astaxie/beego"
+	"github.com/astaxie/beego/context"
+	"strings"
+)
+
+var (
+	ClientIp   string
+	ClientPort string
 )
 
 type BaseController struct {
 	beego.Controller
+}
+
+func (this *BaseController) Init(ctx *context.Context, controllerName, actionName string, app interface{}) {
+	this.Controller.Init(ctx, controllerName, actionName, app)
+	s := strings.Split(ctx.Request.RemoteAddr, ":")
+	ClientIp = s[0]
+	ClientPort = s[1]
 }
 
 func (this *BaseController) SendRes(code int, msg string, data interface{}) {

@@ -12,8 +12,8 @@ var (
 )
 
 func init() {
-	AppId = beego.AppConfig.String("")
-	MchId = beego.AppConfig.String("")
-	Key = beego.AppConfig.String("")
-	AppSecret = beego.AppConfig.String("")
+	AppId = beego.AppConfig.String("wechat.appid")
+	MchId = beego.AppConfig.String("wechat.wxpay.mchid")
+	Key = beego.AppConfig.String("wechat.wxpay.key")
+	AppSecret = beego.AppConfig.String("wechat.secret")
 }
