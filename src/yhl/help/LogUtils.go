@@ -33,7 +33,8 @@ func Log(filename string, info interface{}) {
 	log := logs.NewLogger(10000)
 	log.SetLogger(logs.AdapterFile, string(jsonStr))
 	log.EnableFuncCallDepth(true)
+	log.Async()
 
-	msg := fmt.Sprintf("%v", info)
+	msg := fmt.Sprintf("%+v", info)
 	log.Info(msg)
 }
