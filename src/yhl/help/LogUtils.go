@@ -32,6 +32,7 @@ func Log(filename string, info interface{}) {
 
 	log := logs.NewLogger(10000)
 	log.SetLogger(logs.AdapterFile, string(jsonStr))
+	log.SetLogFuncCallDepth(3)
 	log.EnableFuncCallDepth(true)
 	log.Async()
 
