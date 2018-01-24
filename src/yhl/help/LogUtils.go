@@ -3,6 +3,7 @@ package help
 import (
 	"encoding/json"
 	"github.com/astaxie/beego/logs"
+	"time"
 )
 
 /*
@@ -21,9 +22,11 @@ func init() {
 */
 
 func Log(filename, msg string) {
-	f := "./log/" + filename
-	m := make(map[string]string)
+	f := "./log/" + filename + "." + time.Now().Format(DateFormat)
+	m := make(map[string]interface{})
 	m["filename"] = f
+	//m["daily"] = true
+	//m["rotate"] = true
 	jsonStr, _ := json.Marshal(m)
 
 	log := logs.NewLogger(10000)
