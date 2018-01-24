@@ -2,23 +2,32 @@ package wxpay
 
 import (
 	"encoding/xml"
-	"fmt"
+	"github.com/astaxie/beego/httplib"
 	"strings"
 	"yhl/help"
 )
 
-func UnifiedOrder(orderReq *UnifyOrderReq) {
-	m := help.StructToMap(*orderReq)
-
+func UnifiedOrder(orderReq *UnifyOrderReq) UnifyOrderResp {
 	orderReq.Appid = AppId
 	orderReq.Mch_id = MchId
-	orderReq.Sign = Sign(m)
-
 	orderReq.Nonce_str = help.RandStr(32)
 
-	xmlByte, _ := xml.Marshal(orderReq)
+	m := help.StructToMap(*orderReq)
+
+	orderReq.Sign = Sign(m)
+
+	xmlByte, _ := xml.MarshalIndent(orderReq, "", "    ")
 	xmlStr := string(xmlByte)
 	strXml := strings.Replace(xmlStr, "UnifyOrderReq", "xml", -1)
-	fmt.Println(strXml)
+
+	url := "https://api.mch.weixin.qq.com/pay/unifiedorder"
+	req := httplib.Post(url)
+	req.Header("Accept", "application/xml")
+	req.Header("Content-Type", "application/xml;charset=utf-8")
+	req.Body(strXml)
+	res := UnifyOrderResp{}
+	req.ToXML(&res)
+
+	return res
 
 }

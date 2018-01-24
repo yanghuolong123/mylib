@@ -26,6 +26,19 @@ type UnifyOrderReq struct {
 	Time_expire      string `xml:"time_expire"`
 }
 
+type UnifyOrderResp struct {
+	Return_code string `xml:"return_code"`
+	Return_msg  string `xml:"return_msg"`
+	Appid       string `xml:"appid"`
+	Mch_id      string `xml:"mch_id"`
+	Nonce_str   string `xml:"nonce_str"`
+	Sign        string `xml:"sign"`
+	Result_code string `xml:"result_code"`
+	Prepay_id   string `xml:"prepay_id"`
+	Trade_type  string `xml:"trade_type"`
+	Code_url    string `xml:"code_url"`
+}
+
 func Sign(m map[string]interface{}) string {
 	// 对key进行排序
 	keys := make([]string, 0)

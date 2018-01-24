@@ -2,6 +2,7 @@ package help
 
 import (
 	"encoding/json"
+	"fmt"
 	"github.com/astaxie/beego/logs"
 	"time"
 )
@@ -21,7 +22,7 @@ func init() {
 }
 */
 
-func Log(filename, msg string) {
+func Log(filename string, info interface{}) {
 	f := "./log/" + filename + "." + time.Now().Format(DateFormat)
 	m := make(map[string]interface{})
 	m["filename"] = f
@@ -33,5 +34,6 @@ func Log(filename, msg string) {
 	log.SetLogger(logs.AdapterFile, string(jsonStr))
 	log.EnableFuncCallDepth(true)
 
+	msg := fmt.Sprintf("%v", info)
 	log.Info(msg)
 }
