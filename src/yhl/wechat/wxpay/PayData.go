@@ -72,7 +72,7 @@ type WXPayNotifyReq struct {
 	//	Return_msg     string `xml:"return_msg"`
 	Appid        string `xml:"appid"`
 	Mch_id       string `xml:"mch_id"`
-	Nonce        string `xml:"nonce_str"`
+	Nonce_str    string `xml:"nonce_str"`
 	Sign         string `xml:"sign"`
 	Result_code  string `xml:"result_code"`
 	Openid       string `xml:"openid"`
