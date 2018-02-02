@@ -23,11 +23,11 @@ func init() {
 */
 
 func Log(filename string, info interface{}) {
-	f := "./log/" + filename + "." + time.Now().Format(DateFormat)
+	f := "./log/" + filename + "." + time.Now().Format(DateFormat) + ".log"
 	m := make(map[string]interface{})
 	m["filename"] = f
-	//m["daily"] = true
-	//m["rotate"] = true
+	m["daily"] = false
+	m["rotate"] = false
 	jsonStr, _ := json.Marshal(m)
 
 	log := logs.NewLogger(10000)
