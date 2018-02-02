@@ -31,16 +31,3 @@ func UnifiedOrder(orderReq *UnifyOrderReq) UnifyOrderResp {
 	return res
 
 }
-
-func ToWxRespXmlStr(code, msg string) string {
-	resp := new(WXPayNotifyResp)
-	resp.Return_code = code
-	resp.Return_msg = msg
-
-	b, _ := xml.Marshal(resp)
-
-	strResp := strings.Replace(string(b), "WXPayNotifyResp", "xml", -1)
-	help.Log("wxpay", "strResp: "+strResp)
-
-	return strResp
-}

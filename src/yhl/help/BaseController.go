@@ -47,3 +47,9 @@ func (this *BaseController) SendResJsonp(code int, msg string, data interface{})
 	this.ServeJSONP()
 	this.StopRun()
 }
+
+func (this *BaseController) SendXml(data interface{}) {
+	this.Data["xml"] = data
+	this.ServeXML()
+	this.StopRun()
+}

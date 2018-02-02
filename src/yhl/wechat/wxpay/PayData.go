@@ -1,6 +1,7 @@
 package wxpay
 
 import (
+	"encoding/xml"
 	"fmt"
 	"sort"
 	"strings"
@@ -90,6 +91,7 @@ type WXPayNotifyReq struct {
 }
 
 type WXPayNotifyResp struct {
-	Return_code string `xml:"return_code"`
-	Return_msg  string `xml:"return_msg"`
+	XMLName     xml.Name `xml:"xml"`
+	Return_code string   `xml:"return_code"`
+	Return_msg  string   `xml:"return_msg"`
 }
