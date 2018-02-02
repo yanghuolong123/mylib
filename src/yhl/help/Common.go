@@ -1,6 +1,7 @@
 package help
 
 import (
+	"encoding/xml"
 	"fmt"
 	"reflect"
 	"strings"
@@ -18,6 +19,7 @@ func StructToMap(obj interface{}) map[string]interface{} {
 			data[strings.ToLower(t.Field(i).Name)] = fmt.Sprintf("%d", val)
 		case *int:
 			data[strings.ToLower(t.Field(i).Name)] = fmt.Sprintf("%d", val)
+		case xml.Name:
 		default:
 			data[strings.ToLower(t.Field(i).Name)] = val
 			_ = p
