@@ -28,3 +28,9 @@ func StructToMap(obj interface{}) map[string]interface{} {
 
 	return data
 }
+
+func Error(err error) {
+	if err != nil {
+		Log("error", err.Error())
+	}
+}
