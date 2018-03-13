@@ -23,7 +23,7 @@ func Date() (year, month, day int) {
 func ShowTime(t time.Time) (s string) {
 	now := time.Now()
 	if t.After(now) {
-		return
+		return fmt.Sprintf("%d秒前", 1)
 	}
 
 	du := time.Since(t) / time.Second
