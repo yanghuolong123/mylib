@@ -27,5 +27,5 @@ func (this *UploadController) Uploadfile() {
 	fileRoute := dir + filename
 	this.SaveToFile("file", fileRoute)
 
-	this.SendRes(0, "success", fileRoute)
+	this.SendRes(0, "success", "/"+fileRoute)
 }
