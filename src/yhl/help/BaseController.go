@@ -17,8 +17,12 @@ type BaseController struct {
 
 func (this *BaseController) Init(ctx *context.Context, controllerName, actionName string, app interface{}) {
 	this.Controller.Init(ctx, controllerName, actionName, app)
+	ip := ctx.Input.Header("X-Real-IP")
+	ClientIp = ip
 	s := strings.Split(ctx.Request.RemoteAddr, ":")
-	ClientIp = s[0]
+	if ip == "" {
+		ClientIp = s[0]
+	}
 	ClientPort = s[1]
 }
 
