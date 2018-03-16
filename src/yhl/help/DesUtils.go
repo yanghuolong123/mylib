@@ -33,11 +33,11 @@ func DesEncrypt(data, keyStr string) string {
 	crypted := make([]byte, len(origData))
 	blockMode.CryptBlocks(crypted, origData)
 
-	return base64.StdEncoding.EncodeToString(crypted)
+	return base64.URLEncoding.EncodeToString(crypted)
 }
 
 func DesDecrypt(data, keyStr string) string {
-	crypted, err := base64.StdEncoding.DecodeString(data)
+	crypted, err := base64.URLEncoding.DecodeString(data)
 	if err != nil {
 		Error(err)
 		return ""
