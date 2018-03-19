@@ -13,6 +13,9 @@ func init() {
 	dbuser := beego.AppConfig.String("mysql.user")
 	dbpasswd := beego.AppConfig.String("mysql.pass")
 	dbname := beego.AppConfig.String("mysql.dbname")
+	if dbhost == "" || dbuser == "" {
+		return
+	}
 
 	//orm.DefaultTimeLoc = time.UTC
 	conn := dbuser + ":" + dbpasswd + "@tcp(" + dbhost + ":" + dbport + ")/" + dbname + "?charset=utf8&loc=Local"
