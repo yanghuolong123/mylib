@@ -12,8 +12,16 @@ var (
 
 func init() {
 	host := beego.AppConfig.String("mongo.host")
-	MongoConn, _ := mgo.Dial(host)
-
 	db := beego.AppConfig.String("mongo.db")
-	MongoDb = MongoConn.DB(db)
+	if host == "" || db == "" {
+		return
+	}
+
+	MongoConn, err := mgo.Dial(host)
+
+	Error(err)
+	if err == nil {
+		MongoDb = MongoConn.DB(db)
+	}
+
 }

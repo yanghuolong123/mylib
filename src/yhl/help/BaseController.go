@@ -4,6 +4,8 @@ import (
 	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/context"
 	"strings"
+	"time"
+	"yhl/model"
 )
 
 var (
@@ -56,4 +58,23 @@ func (this *BaseController) SendXml(data interface{}) {
 	this.Data["xml"] = data
 	this.ServeXML()
 	this.StopRun()
+}
+
+func (this *BaseController) Prepare() {
+	go func(this *BaseController) {
+		if MongoDb == nil {
+			return
+		}
+
+		r := model.TraceRecord{
+			Ip:       this.Ctx.Input.IP(),
+			Uri:      this.Ctx.Input.URI(),
+			Datetime: time.Now().Format(DatetimeFormat),
+			Time:     time.Now(),
+		}
+
+		err := MongoDb.C("trace_record").Insert(r)
+		Error(err)
+
+	}(this)
 }
