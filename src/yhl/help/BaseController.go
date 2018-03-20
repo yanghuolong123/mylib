@@ -79,3 +79,7 @@ func (this *BaseController) Prepare() {
 
 	}(this)
 }
+
+func (this *BaseController) Tips(msg string) {
+	this.Redirect("/tips?msg="+msg, 302)
+}
