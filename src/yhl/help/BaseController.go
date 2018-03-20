@@ -3,7 +3,7 @@ package help
 import (
 	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/context"
-	"strings"
+	//	"strings"
 	"time"
 	"yhl/model"
 )
@@ -19,13 +19,14 @@ type BaseController struct {
 
 func (this *BaseController) Init(ctx *context.Context, controllerName, actionName string, app interface{}) {
 	this.Controller.Init(ctx, controllerName, actionName, app)
-	ip := ctx.Input.Header("X-Real-IP")
-	ClientIp = ip
-	s := strings.Split(ctx.Request.RemoteAddr, ":")
-	if ip == "" {
-		ClientIp = s[0]
-	}
-	ClientPort = s[1]
+	ClientIp = ctx.Input.IP()
+	//	ip := ctx.Input.Header("X-Real-IP")
+	//	ClientIp = ip
+	//	s := strings.Split(ctx.Request.RemoteAddr, ":")
+	//	if ip == "" {
+	//		ClientIp = s[0]
+	//	}
+	//	ClientPort = s[1]
 }
 
 func (this *BaseController) SendRes(code int, msg string, data interface{}) {
