@@ -19,7 +19,7 @@ func (this *UploadController) Uploadfile() {
 	defer f.Close()
 
 	ext := filepath.Ext(h.Filename)
-	filename := time.Now().Format(help.DatetimeNumFormat) + help.IntToString(help.RandNum(1000, 9999)) + ext
+	filename := time.Now().Format(help.DatetimeNumFormat) + help.IntToStr(help.RandNum(1000, 9999)) + ext
 	dir := "uploads/"
 	y, m, d := help.Date()
 	dir += fmt.Sprintf("%d/%d/%d/", y, m, d)

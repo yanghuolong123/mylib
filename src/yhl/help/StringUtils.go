@@ -1,14 +1,21 @@
 package help
 
 import (
+	"fmt"
 	"strconv"
 )
 
-func IntToString(num int) string {
+func IntToStr(num int) string {
 	return strconv.Itoa(num)
 }
 
-func StringToInt(num string) int {
-	i, _ := strconv.Atoi(num)
+func StrToInt(num string) int {
+	i, err := strconv.Atoi(num)
+	Error(err)
+
 	return i
+}
+
+func ToStr(v interface{}) string {
+	return fmt.Sprintf("%v", v)
 }
