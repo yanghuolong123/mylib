@@ -2,17 +2,19 @@ package model
 
 import (
 	"fmt"
+	"github.com/astaxie/beego/orm"
 )
 
 type Page struct {
-	TotalNum    int
+	TotalCount  int
 	TotalPage   int
-	DataList    []interface{}
 	CurrentPage int
+	CurrentSize int
+	DataList    []orm.Params
 }
 
 func (this *Page) String() string {
-	return fmt.Sprintf("totalNum:%v\n totalPage:%v\n currentPage:%v\n dataList:%v", this.TotalNum, this.TotalPage, this.CurrentPage, this.DataList)
+	return fmt.Sprintf("totalCount:%v\n totalPage:%v\n currentPage:%v\n currentSize:%v\n dataList:%v", this.TotalCount, this.TotalPage, this.CurrentPage, this.CurrentSize, this.DataList)
 }
 
 type Query struct {
