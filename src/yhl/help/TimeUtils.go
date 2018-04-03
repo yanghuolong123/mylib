@@ -23,19 +23,20 @@ func Date() (year, month, day int) {
 func GetDateBegin(t time.Time) time.Time {
 	y, m, d := t.Date()
 
-	return time.Date(y, m, d, 0, 0, 0, 0, time.UTC)
+	return time.Date(y, m, d, 0, 0, 0, 0, time.Local)
 }
 
 func GetDateEnd(t time.Time) time.Time {
 	y, m, d := t.Date()
 
-	return time.Date(y, m, d, 24, 0, 0, 0, time.UTC)
+	return time.Date(y, m, d, 24, 0, 0, 0, time.Local)
 }
 
 func GetMonthBegin(t time.Time) time.Time {
 	y, m, _ := t.Date()
 
-	return time.Date(y, m, 1, 0, 0, 0, 0, time.UTC)
+	//return time.Date(y, m, 1, 0, 0, 0, 0, time.UTC)
+	return time.Date(y, m, 1, 0, 0, 0, 0, time.Local)
 }
 
 func GetMonthEnd(t time.Time) time.Time {
