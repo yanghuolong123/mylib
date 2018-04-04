@@ -11,14 +11,16 @@ type Page struct {
 	CurrentPage int
 	CurrentSize int
 	DataList    []orm.Params
+	HasMore     bool
 }
 
 func (this *Page) String() string {
-	return fmt.Sprintf("totalCount:%v\n totalPage:%v\n currentPage:%v\n currentSize:%v\n dataList:%v", this.TotalCount, this.TotalPage, this.CurrentPage, this.CurrentSize, this.DataList)
+	return fmt.Sprintf("totalCount:%v\n totalPage:%v\n currentPage:%v\n currentSize:%v\n hasMore:%v\n dataList:%v", this.TotalCount, this.TotalPage, this.CurrentPage, this.CurrentSize, this.HasMore, this.DataList)
 }
 
 type Query struct {
-	Model     interface{}
+	Table     string
 	Condition map[string]interface{}
-	Orderby   []string
+	OrderBy   []string
+	GroupBy   []string
 }
