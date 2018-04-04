@@ -2,7 +2,7 @@ package model
 
 import (
 	"fmt"
-	"github.com/astaxie/beego/orm"
+	//	"github.com/astaxie/beego/orm"
 )
 
 type Page struct {
@@ -10,7 +10,7 @@ type Page struct {
 	TotalPage   int
 	CurrentPage int
 	CurrentSize int
-	DataList    []orm.Params
+	DataList    interface{} //[]orm.Params
 	HasMore     bool
 }
 
@@ -19,8 +19,9 @@ func (this *Page) String() string {
 }
 
 type Query struct {
-	Table     string
-	Condition map[string]interface{}
-	OrderBy   []string
-	GroupBy   []string
+	Table           string
+	Condition       map[string]interface{}
+	OrderBy         []string
+	GroupBy         []string
+	ReturnModelList interface{}
 }

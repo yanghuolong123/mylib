@@ -12,11 +12,7 @@ import (
  page从0开始
 **/
 func GetPageList(q model.Query, page, size int) (p model.Page) {
-	//	m := q.Model
-	//	t := reflect.TypeOf(m)
-	//v := reflect.ValueOf(m)
-
-	//tableName := "tbl_" + strings.ToLower(t.Name())
+	dataList := q.ReturnModelList
 	qs := orm.NewOrm().QueryTable(q.Table)
 
 	if len(q.Condition) > 0 {
@@ -28,14 +24,16 @@ func GetPageList(q model.Query, page, size int) (p model.Page) {
 	cnt, err := qs.Count()
 	Error(err)
 
-	var maps []orm.Params
+	//var maps []orm.Params
 	if len(q.OrderBy) > 0 {
 		qs = qs.OrderBy(q.OrderBy...)
 	}
 	if len(q.GroupBy) > 0 {
 		qs = qs.GroupBy(q.GroupBy...)
 	}
-	qs.Limit(size, page*size).Values(&maps)
+	//qs.Limit(size, page*size).Values(&maps)
+	i, err := qs.Limit(size, page*size).All(dataList)
+	Error(err)
 
 	p.TotalCount = int(cnt)
 	if p.TotalCount%size == 0 {
@@ -44,8 +42,8 @@ func GetPageList(q model.Query, page, size int) (p model.Page) {
 		p.TotalPage = p.TotalCount/size + 1
 	}
 	p.CurrentPage = page
-	p.CurrentSize = len(maps)
-	p.DataList = maps
+	p.CurrentSize = int(i) //len(maps)
+	p.DataList = dataList  //maps
 	p.HasMore = true
 	if p.TotalPage <= (p.CurrentPage + 1) {
 		p.HasMore = false
