@@ -68,7 +68,7 @@ func (this *BaseController) SendXml(data interface{}) {
 
 func (this *BaseController) Prepare() {
 	go func(this *BaseController) {
-		if MongoDb == nil {
+		if !MongoTrace || MongoDb == nil {
 			return
 		}
 

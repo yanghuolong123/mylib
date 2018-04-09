@@ -6,13 +6,15 @@ import (
 )
 
 var (
-	MongoConn *mgo.Session
-	MongoDb   *mgo.Database
+	MongoConn  *mgo.Session
+	MongoDb    *mgo.Database
+	MongoTrace bool
 )
 
 func init() {
 	host := beego.AppConfig.String("mongo.host")
 	db := beego.AppConfig.String("mongo.db")
+	MongoTrace = beego.AppConfig.DefaultBool("mongo.trace", false)
 	if host == "" || db == "" {
 		return
 	}
