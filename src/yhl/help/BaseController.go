@@ -11,7 +11,12 @@ import (
 var (
 	ClientIp   string
 	ClientPort string
+	Version    time.Time
 )
+
+func init() {
+	Version = time.Now()
+}
 
 type BaseController struct {
 	beego.Controller
