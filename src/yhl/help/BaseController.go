@@ -76,7 +76,7 @@ func (this *BaseController) Prepare() {
 			Ip:       this.Ctx.Input.IP(),
 			Uri:      this.Ctx.Input.URI(),
 			Datetime: time.Now().Format(DatetimeFormat),
-			Time:     time.Now(),
+			Time:     time.Now().Local(),
 		}
 
 		err := MongoDb.C("trace_record").Insert(r)

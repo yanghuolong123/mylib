@@ -82,3 +82,10 @@ func ShowTime(t time.Time) (s string) {
 
 	return fmt.Sprintf("%d秒前", du)
 }
+
+func LocalTime(t time.Time) time.Time {
+	//return t.Local()
+	local, _ := time.LoadLocation("Local")
+
+	return t.In(local)
+}
