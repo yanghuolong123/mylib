@@ -73,10 +73,12 @@ func (this *BaseController) Prepare() {
 		}
 
 		r := model.TraceRecord{
-			Ip:       this.Ctx.Input.IP(),
-			Uri:      this.Ctx.Input.URI(),
-			Datetime: time.Now().Format(DatetimeFormat),
-			Time:     time.Now().Local(),
+			Ip:        this.Ctx.Input.IP(),
+			Uri:       this.Ctx.Input.URI(),
+			Refer:     this.Ctx.Input.Refer(),
+			UserAgent: this.Ctx.Input.Header("User-Agent"), //this.Ctx.Input.UserAgent(),
+			Datetime:  time.Now().Format(DatetimeFormat),
+			Time:      time.Now().Local(),
 		}
 
 		err := MongoDb.C("trace_record").Insert(r)

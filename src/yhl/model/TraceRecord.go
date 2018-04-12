@@ -5,8 +5,10 @@ import (
 )
 
 type TraceRecord struct {
-	Ip       string //`json:"ip"`
-	Uri      string //`json:"uri"`
-	Datetime string
-	Time     time.Time //`json:"time"`
+	Ip        string //`json:"ip"`
+	Uri       string //`json:"uri"`
+	Datetime  string
+	Refer     string
+	UserAgent string
+	Time      time.Time //`json:"time"`
 }
