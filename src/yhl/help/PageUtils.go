@@ -5,6 +5,7 @@ import (
 	"github.com/astaxie/beego/orm"
 	//	"reflect"
 	//	"strings"
+	"math"
 	"yhl/model"
 )
 
@@ -36,11 +37,12 @@ func GetPageList(q model.Query, page, size int) (p model.Page) {
 	Error(err)
 
 	p.TotalCount = int(cnt)
-	if p.TotalCount%size == 0 {
-		p.TotalPage = p.TotalCount / size
-	} else {
-		p.TotalPage = p.TotalCount/size + 1
-	}
+	//if p.TotalCount%size == 0 {
+	//	p.TotalPage = p.TotalCount / size
+	//} else {
+	//	p.TotalPage = p.TotalCount/size + 1
+	//}
+	p.TotalPage = int(math.Ceil(float64(p.TotalCount) / float64(size)))
 	p.CurrentPage = page
 	p.CurrentSize = int(i) //len(maps)
 	p.DataList = dataList  //maps
