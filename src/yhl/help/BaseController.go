@@ -9,9 +9,12 @@ import (
 )
 
 var (
-	ClientIp   string
-	ClientPort string
-	Version    time.Time
+	ClientIp    string
+	ClientPort  string
+	Version     time.Time
+	ClientSite  string
+	ClientUri   string
+	ClientRoute string
 )
 
 func init() {
@@ -25,6 +28,9 @@ type BaseController struct {
 func (this *BaseController) Init(ctx *context.Context, controllerName, actionName string, app interface{}) {
 	this.Controller.Init(ctx, controllerName, actionName, app)
 	ClientIp = ctx.Input.IP()
+	ClientSite = ctx.Input.Site()
+	ClientUri = ctx.Input.URI()
+	ClientRoute = ClientSite + ClientUri
 	//	ip := ctx.Input.Header("X-Real-IP")
 	//	ClientIp = ip
 	//	s := strings.Split(ctx.Request.RemoteAddr, ":")

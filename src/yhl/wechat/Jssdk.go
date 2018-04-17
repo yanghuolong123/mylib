@@ -7,11 +7,17 @@ import (
 	"yhl/help"
 )
 
-func GetSignPackage(urlstr string) map[string]interface{} {
+type Share struct {
+	Title string
+	Desc  string
+	Link  string
+	Img   string
+}
+
+func GetSignPackage() map[string]interface{} {
 	jsapiTicket := getJsApiTickey()
 
-	if urlstr == "" {
-	}
+	urlstr := help.ClientRoute
 
 	timeStamp := time.Now().Unix()
 	nonceStr := help.RandStr(32)
