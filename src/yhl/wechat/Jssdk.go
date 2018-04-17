@@ -22,7 +22,7 @@ func GetSignPackage() map[string]interface{} {
 	timeStamp := time.Now().Unix()
 	nonceStr := help.RandStr(32)
 
-	str := "jsapi_tickey=" + jsapiTicket + "&nonceStr=" + nonceStr + "&timestamp=" + help.ToStr(timeStamp) + "&url=" + urlstr
+	str := "jsapi_ticket=" + jsapiTicket + "&noncestr=" + nonceStr + "&timestamp=" + help.ToStr(timeStamp) + "&url=" + urlstr
 
 	m := map[string]interface{}{}
 	m["appId"] = Appid
