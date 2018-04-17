@@ -37,7 +37,7 @@ func GetSignPackage() map[string]interface{} {
 
 func getJsApiTickey() (token string) {
 	cache := help.Cache
-	t := cache.Get("jspai_ticket_" + Appid)
+	t := cache.Get("jsapi_ticket_" + Appid)
 	if t != nil {
 		token = string(t.([]uint8))
 		return
@@ -54,7 +54,7 @@ func getJsApiTickey() (token string) {
 	if v, ok := data["ticket"]; ok {
 		token = v.(string)
 		ttl := time.Duration(3600)
-		cache.Put("access_token_"+Appid, token, ttl*time.Second)
+		cache.Put("jsapi_ticket_"+Appid, token, ttl*time.Second)
 	}
 
 	return
