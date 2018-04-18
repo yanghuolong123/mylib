@@ -4,7 +4,7 @@ import (
 	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/context"
 	"github.com/astaxie/beego/utils"
-	//	"strings"
+	"strings"
 	"time"
 	"yhl/model"
 )
@@ -100,4 +100,13 @@ func (this *BaseController) Prepare() {
 
 func (this *BaseController) Tips(msg string) {
 	this.Redirect("/tips?msg="+msg, 302)
+}
+
+func (this *BaseController) IsWeixin() bool {
+	agent := this.Ctx.Input.UserAgent()
+	if strings.Index(agent, "MicroMessenger") != -1 {
+		return true
+	}
+
+	return false
 }
