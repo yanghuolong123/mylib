@@ -3,6 +3,7 @@ package help
 import (
 	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/context"
+	"github.com/astaxie/beego/utils"
 	//	"strings"
 	"time"
 	"yhl/model"
@@ -75,6 +76,10 @@ func (this *BaseController) SendXml(data interface{}) {
 func (this *BaseController) Prepare() {
 	go func(this *BaseController) {
 		if !MongoTrace || MongoDb == nil {
+			return
+		}
+		exclude := []string{"/wechat"}
+		if utils.InSlice(this.Ctx.Input.URL(), exclude) {
 			return
 		}
 
