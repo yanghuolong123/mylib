@@ -5,12 +5,14 @@ import (
 	"encoding/xml"
 	"fmt"
 	"github.com/astaxie/beego"
+	"github.com/astaxie/beego/context"
 	"github.com/astaxie/beego/httplib"
 	"io"
 	"sort"
 	"strings"
 	"time"
 	"yhl/help"
+	"yhl/wechat/wxpay"
 )
 
 const (
@@ -180,4 +182,8 @@ func GetShortUrl(urlLong string) (urlShort string) {
 	}
 
 	return
+}
+
+func GetOpenId(c *context.Context, urlStr string) (openid string) {
+	return wxpay.GetOpenId(c, urlStr)
 }
