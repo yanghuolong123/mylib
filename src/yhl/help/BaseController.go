@@ -110,3 +110,19 @@ func (this *BaseController) IsWeixin() bool {
 
 	return false
 }
+
+func (this *BaseController) IsMobile() bool {
+	if this.IsWeixin() {
+		return true
+	}
+
+	agent := this.Ctx.Input.UserAgent()
+	agents := []string{"Android", "iPhone", "iPad", "iPod", "SymbianOS", "Windows Phone"}
+	for _, ag := range agents {
+		if strings.Index(agent, ag) != -1 {
+			return true
+		}
+	}
+
+	return false
+}
