@@ -187,3 +187,14 @@ func GetShortUrl(urlLong string) (urlShort string) {
 func GetOpenId(c *context.Context, urlStr string) (openid string) {
 	return wxpay.GetOpenId(c, urlStr)
 }
+
+func CreateMenu(m map[string]interface{}) map[string]interface{} {
+	url := ApiUrl + "/cgi-bin/menu/create?access_token=" + GetAccessToken()
+	req := httplib.Post(url)
+	req.JSONBody(m)
+	data := make(map[string]interface{})
+	req.ToJSON(&data)
+
+	//fmt.Println(data)
+	return data
+}
