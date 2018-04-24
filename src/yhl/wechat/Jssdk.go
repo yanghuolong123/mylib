@@ -15,7 +15,7 @@ type Share struct {
 }
 
 func GetSignPackage() map[string]interface{} {
-	jsapiTicket := getJsApiTickey()
+	jsapiTicket := GetJsApiTickey()
 
 	urlstr := help.ClientRoute
 
@@ -35,7 +35,7 @@ func GetSignPackage() map[string]interface{} {
 	return m
 }
 
-func getJsApiTickey() (token string) {
+func GetJsApiTickey() (token string) {
 	cache := help.Cache
 	t := cache.Get("jsapi_ticket_" + Appid)
 	if t != nil {
@@ -53,7 +53,7 @@ func getJsApiTickey() (token string) {
 
 	if v, ok := data["ticket"]; ok {
 		token = v.(string)
-		ttl := time.Duration(3600)
+		ttl := time.Duration(7200)
 		cache.Put("jsapi_ticket_"+Appid, token, ttl*time.Second)
 	}
 
