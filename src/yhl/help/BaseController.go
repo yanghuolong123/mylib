@@ -92,6 +92,11 @@ func (this *BaseController) Prepare() {
 			Time:      time.Now().Local(),
 		}
 
+		u := this.GetSession("user")
+		if u != nil {
+			r.User = u
+		}
+
 		err := MongoDb.C("trace_record").Insert(r)
 		Error(err)
 

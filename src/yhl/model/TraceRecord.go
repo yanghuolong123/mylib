@@ -10,5 +10,6 @@ type TraceRecord struct {
 	Datetime  string
 	Refer     string
 	UserAgent string
+	User      interface{}
 	Time      time.Time //`json:"time"`
 }
