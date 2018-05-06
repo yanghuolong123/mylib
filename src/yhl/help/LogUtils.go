@@ -38,4 +38,5 @@ func Log(filename string, info interface{}) {
 
 	msg := fmt.Sprintf("%+v", info)
 	log.Info(msg)
+	log.Close()
 }
