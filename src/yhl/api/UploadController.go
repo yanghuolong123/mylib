@@ -67,11 +67,18 @@ func (this *UploadController) WebUpload() {
 	filename := this.Ctx.Input.Query("name")
 	chunks := this.Ctx.Input.Query("chunks")
 	chunk := this.Ctx.Input.Query("chunk")
+	if chunk == "" {
+		chunks = "1"
+		chunk = "0"
+	}
 	f, h, err := this.GetFile("file")
 	if err != nil {
 		help.Error(err)
+		this.SendResJsonp(101, "fail", err.Error())
 	}
 	defer f.Close()
+	//	fmt.Println("==== chunks:", chunks)
+	//	fmt.Println("==== chunk:", chunk)
 	ext := filepath.Ext(h.Filename)
 	filename = help.Md5(filename) + ext
 	prefix := "tmp/"
@@ -84,15 +91,17 @@ func (this *UploadController) WebUpload() {
 	dir := "uploads/"
 	y, m, d := help.Date()
 	dir = dir + fmt.Sprintf("%d/%d/%d/", y, m, d)
+	//	fmt.Println("==== num:", num)
+	//	fmt.Println("==== count:", count)
+	//	fmt.Println("========== filename:", filename)
+	outfile := dir + fmt.Sprintf("%s%d", time.Now().Format(help.DatetimeNumFormat), help.RandNum(10000, 99999)) + ext
 	if num == count {
-		go func(prefix, filename, dir, ext string) {
+		go func(prefix, filename, outDir, outfile string) {
 			cache.Delete(filename)
-			outDir := "" + dir
 			if !help.PathExist(outDir) {
 				os.MkdirAll(outDir, os.ModePerm)
 			}
-			outfile := outDir + fmt.Sprintf("%d%d", time.Now().Unix(), help.RandNum(10000, 99999)) + ext
-			out, _ := os.OpenFile(outfile, os.O_CREATE|os.O_WRONLY, 0600)
+			out, _ := os.OpenFile(outfile, os.O_CREATE|os.O_WRONLY, 0666)
 			bWriter := bufio.NewWriter(out)
 			for i := 0; i < count; i++ {
 				infile := prefix + filename + "_" + strconv.Itoa(i) + ".part"
@@ -111,13 +120,15 @@ func (this *UploadController) WebUpload() {
 			}
 			bWriter.Flush()
 
-		}(prefix, filename, dir, ext)
+		}(prefix, filename, dir, outfile)
+
+		cache.Delete(filename)
 	} else if num > count {
 		cache.Delete(filename)
 		this.SendResJsonp(101, "fail", "uplad fail, please upload again!")
 	}
 
-	this.SendResJsonp(0, "ok", "uploads/"+fmt.Sprintf("%d/%d/%d/", y, m, d)+filename)
+	this.SendResJsonp(0, "ok", "/"+outfile)
 }
 
 func (this *UploadController) SendResJsonp(code int, msg string, data interface{}) {
