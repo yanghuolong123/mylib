@@ -87,6 +87,7 @@ func (this *BaseController) Prepare() {
 
 		r := model.TraceRecord{
 			Ip:        this.Ctx.Input.IP(),
+			Domain:    this.Ctx.Input.Domain(),
 			Uri:       this.Ctx.Input.URI(),
 			Refer:     this.Ctx.Input.Refer(),
 			UserAgent: this.Ctx.Input.Header("User-Agent"), //this.Ctx.Input.UserAgent(),

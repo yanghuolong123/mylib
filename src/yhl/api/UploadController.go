@@ -1,8 +1,12 @@
 package api
 
 import (
+	"bufio"
 	"fmt"
+	"io"
+	"os"
 	"path/filepath"
+	"strconv"
 	"time"
 	"yhl/help"
 )
@@ -53,4 +57,83 @@ func (this *UploadController) CkUploadfile() {
 	out += "</script>"
 
 	this.Ctx.WriteString(out)
+}
+
+func (this *UploadController) WebUpload() {
+	method := this.Ctx.Input.Method()
+	if method == "OPTIONS" {
+		this.StopRun()
+	}
+	filename := this.Ctx.Input.Query("name")
+	chunks := this.Ctx.Input.Query("chunks")
+	chunk := this.Ctx.Input.Query("chunk")
+	f, h, err := this.GetFile("file")
+	if err != nil {
+		help.Error(err)
+	}
+	defer f.Close()
+	ext := filepath.Ext(h.Filename)
+	filename = help.Md5(filename) + ext
+	prefix := "tmp/"
+	part := prefix + filename + "_" + chunk + ".part"
+	this.SaveToFile("file", part)
+	count, err := strconv.Atoi(chunks)
+	cache := help.Cache
+	cache.Incr(filename)
+	num, err := strconv.Atoi(string(cache.Get(filename).([]uint8)))
+	dir := "uploads/"
+	y, m, d := help.Date()
+	dir = dir + fmt.Sprintf("%d/%d/%d/", y, m, d)
+	if num == count {
+		go func(prefix, filename, dir, ext string) {
+			cache.Delete(filename)
+			outDir := "" + dir
+			if !help.PathExist(outDir) {
+				os.MkdirAll(outDir, os.ModePerm)
+			}
+			outfile := outDir + fmt.Sprintf("%d%d", time.Now().Unix(), help.RandNum(10000, 99999)) + ext
+			out, _ := os.OpenFile(outfile, os.O_CREATE|os.O_WRONLY, 0600)
+			bWriter := bufio.NewWriter(out)
+			for i := 0; i < count; i++ {
+				infile := prefix + filename + "_" + strconv.Itoa(i) + ".part"
+				in, _ := os.Open(infile)
+				bReader := bufio.NewReader(in)
+				for {
+					buffer := make([]byte, 1024)
+					readCount, err := bReader.Read(buffer)
+					if err == io.EOF {
+						os.Remove(infile)
+						break
+					} else {
+						bWriter.Write(buffer[:readCount])
+					}
+				}
+			}
+			bWriter.Flush()
+
+		}(prefix, filename, dir, ext)
+	} else if num > count {
+		cache.Delete(filename)
+		this.SendResJsonp(101, "fail", "uplad fail, please upload again!")
+	}
+
+	this.SendResJsonp(0, "ok", "uploads/"+fmt.Sprintf("%d/%d/%d/", y, m, d)+filename)
+}
+
+func (this *UploadController) SendResJsonp(code int, msg string, data interface{}) {
+	m := make(map[string]interface{})
+	m["jsonrpc"] = "2.0"
+	m["success"] = true
+	if code != 0 {
+		m["success"] = false
+	}
+	m["code"] = code
+	m["msg"] = msg
+	if data != nil {
+		m["data"] = data
+	}
+
+	this.Data["json"] = m
+	this.ServeJSON()
+	this.StopRun()
 }

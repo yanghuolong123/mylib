@@ -6,6 +6,7 @@ import (
 
 type TraceRecord struct {
 	Ip        string //`json:"ip"`
+	Domain    string
 	Uri       string //`json:"uri"`
 	Datetime  string
 	Refer     string
