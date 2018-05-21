@@ -47,8 +47,8 @@ func JsPaySdk(prepayId string) map[string]interface{} {
 	return m
 }
 
-func GetOpenId(c *context.Context, urlStr string) (openid string) {
-	urlStr = url.QueryEscape(urlStr)
+func GetOpenId(c *context.Context) (openid string) {
+	urlStr := url.QueryEscape(c.Input.Site() + c.Input.URI())
 	if code := c.Input.Query("code"); code == "" {
 
 		codeUrl := "https://open.weixin.qq.com/connect/oauth2/authorize?appid=" + AppId + "&redirect_uri=" + urlStr + "&response_type=code&scope=snsapi_base&state=STATE#wechat_redirect"

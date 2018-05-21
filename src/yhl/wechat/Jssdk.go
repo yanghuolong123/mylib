@@ -2,6 +2,7 @@ package wechat
 
 import (
 	"fmt"
+	"github.com/astaxie/beego/context"
 	"github.com/astaxie/beego/httplib"
 	"time"
 	"yhl/help"
@@ -14,10 +15,10 @@ type Share struct {
 	Img   string
 }
 
-func GetSignPackage() map[string]interface{} {
+func GetSignPackage(c *context.Context) map[string]interface{} {
 	jsapiTicket := GetJsApiTickey()
 
-	urlstr := help.ClientRoute
+	urlstr := c.Input.Site() + c.Input.URI()
 
 	timeStamp := time.Now().Unix()
 	nonceStr := help.RandStr(32)
