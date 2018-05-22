@@ -184,8 +184,8 @@ func GetShortUrl(urlLong string) (urlShort string) {
 	return
 }
 
-func GetOpenId(c *context.Context) (openid string) {
-	return wxpay.GetOpenId(c)
+func GetOpenId(c *context.Context, site string) (openid string) {
+	return wxpay.GetOpenId(c, site)
 }
 
 func CreateMenu(m map[string]interface{}) map[string]interface{} {
