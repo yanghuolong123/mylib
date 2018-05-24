@@ -117,8 +117,12 @@ func (this *UploadController) WebUpload() {
 						bWriter.Write(buffer[:readCount])
 					}
 				}
+
+				defer in.Close()
 			}
 			bWriter.Flush()
+
+			defer out.Close()
 
 		}(prefix, filename, dir, outfile)
 
