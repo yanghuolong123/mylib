@@ -80,7 +80,8 @@ func (this *BaseController) Prepare() {
 		if !MongoTrace || MongoDb == nil {
 			return
 		}
-		exclude := []string{"/wechat"}
+		exStr := beego.AppConfig.String("mongo.trace.exclude")
+		exclude := strings.Split(exStr, ",") //[]string{"/wechat"}
 		if utils.InSlice(this.Ctx.Input.URL(), exclude) {
 			return
 		}
