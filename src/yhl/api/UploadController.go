@@ -102,10 +102,12 @@ func (this *UploadController) WebUpload() {
 				os.MkdirAll(outDir, os.ModePerm)
 			}
 			out, _ := os.OpenFile(outfile, os.O_CREATE|os.O_WRONLY, 0666)
+			defer out.Close()
 			bWriter := bufio.NewWriter(out)
 			for i := 0; i < count; i++ {
 				infile := prefix + filename + "_" + strconv.Itoa(i) + ".part"
 				in, _ := os.Open(infile)
+				defer in.Close()
 				bReader := bufio.NewReader(in)
 				for {
 					buffer := make([]byte, 1024)
@@ -117,12 +119,8 @@ func (this *UploadController) WebUpload() {
 						bWriter.Write(buffer[:readCount])
 					}
 				}
-
-				defer in.Close()
 			}
 			bWriter.Flush()
-
-			defer out.Close()
 
 		}(prefix, filename, dir, outfile)
 
