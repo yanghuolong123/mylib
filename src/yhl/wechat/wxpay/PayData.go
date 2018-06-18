@@ -61,6 +61,7 @@ func Sign(m map[string]interface{}) string {
 
 	// 在string后加入KEY
 	signStr += "key=" + Key
+	help.Log("wxpay", "signStr:"+signStr)
 
 	// MD5加密并转化为大写
 	cipherStr := help.Md5(signStr)

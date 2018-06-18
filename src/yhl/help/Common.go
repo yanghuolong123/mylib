@@ -3,8 +3,12 @@ package help
 import (
 	"encoding/xml"
 	"fmt"
+	"os"
+	"os/exec"
+	"path/filepath"
 	"reflect"
 	"strings"
+	"time"
 )
 
 func StructToMap(obj interface{}) map[string]interface{} {
@@ -33,4 +37,20 @@ func Error(err error) {
 	if err != nil {
 		Log("error", err.Error())
 	}
+}
+
+func GenOrderNo() string {
+	return time.Now().Format(DatetimeNumFormat) + fmt.Sprintf("%d", RandNum(10000, 99999))
+}
+
+func GetAPPRootPath() string {
+	file, err := exec.LookPath(os.Args[0])
+	if err != nil {
+		return ""
+	}
+	p, err := filepath.Abs(file)
+	if err != nil {
+		return ""
+	}
+	return filepath.Dir(p)
 }
