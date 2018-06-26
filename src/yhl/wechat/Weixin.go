@@ -81,10 +81,12 @@ func GetAccessToken() (token string) {
 func SendMsg(m map[string]interface{}) {
 	url := ApiUrl + "/cgi-bin/message/custom/send?access_token=" + GetAccessToken()
 	req := httplib.Post(url)
-	//fmt.Println(m)
+	//req.Header("Accept", "application/json")
+	//req.Header("Content-Type", "application/json;charset=utf-8")
 	req.JSONBody(m)
-	req.String()
-	//fmt.Println(req.String())
+	str, err := req.String()
+	help.Log("wxmsg", str)
+	help.Log("wxmsg", err)
 }
 
 func SendTextMsg(touser, content string) {
