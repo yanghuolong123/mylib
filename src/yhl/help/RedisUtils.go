@@ -18,6 +18,7 @@ func init() {
 func NewRedis() (rc *RedisModel, err error) {
 	host := beego.AppConfig.String("redis.host")
 	port := beego.AppConfig.String("redis.port")
+	prefix := beego.AppConfig.String("redis.key.prefix")
 	if host == "" || port == "" {
 		return nil, errors.New("配置错误")
 	}
@@ -52,6 +53,8 @@ func NewRedis() (rc *RedisModel, err error) {
 		Dial:        dialFunc,
 	}
 
+	rc.prefix = prefix
+
 	return rc, nil
 }
 
@@ -61,13 +64,15 @@ type RedisModel struct {
 	dbNum    int
 	key      string
 	password string
+	prefix   string
 }
 
 func (rc *RedisModel) Set(key, val string) error {
 	c := rc.p.Get()
 	defer c.Close()
+	prefix := rc.prefix
 
-	_, err := c.Do("SET", key, val)
+	_, err := c.Do("SET", prefix+key, val)
 	Error(err)
 
 	return err
@@ -76,7 +81,8 @@ func (rc *RedisModel) Set(key, val string) error {
 func (rc *RedisModel) Get(key string) string {
 	c := rc.p.Get()
 	defer c.Close()
-	val, err := redis.String(c.Do("GET", key))
+	prefix := rc.prefix
+	val, err := redis.String(c.Do("GET", prefix+key))
 
 	Error(err)
 
@@ -86,7 +92,8 @@ func (rc *RedisModel) Get(key string) string {
 func (rc *RedisModel) Lpush(key, val string) error {
 	c := rc.p.Get()
 	defer c.Close()
-	_, err := c.Do("lpush", key, val)
+	prefix := rc.prefix
+	_, err := c.Do("lpush", prefix+key, val)
 
 	Error(err)
 	return err
@@ -95,7 +102,8 @@ func (rc *RedisModel) Lpush(key, val string) error {
 func (rc *RedisModel) Rpop(key string) string {
 	c := rc.p.Get()
 	defer c.Close()
-	val, err := redis.String(c.Do("rpop", key))
+	prefix := rc.prefix
+	val, err := redis.String(c.Do("rpop", prefix+key))
 
 	Error(err)
 	return val
