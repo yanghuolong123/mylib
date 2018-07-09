@@ -3,6 +3,7 @@ package help
 import (
 	"encoding/xml"
 	"fmt"
+	"github.com/astaxie/beego"
 	"os"
 	"os/exec"
 	"path/filepath"
@@ -53,4 +54,8 @@ func GetAPPRootPath() string {
 		return ""
 	}
 	return filepath.Dir(p)
+}
+
+func HtmlToStr(html string) string {
+	return beego.HTML2str(html)
 }
