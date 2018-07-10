@@ -67,13 +67,27 @@ type RedisModel struct {
 	prefix   string
 }
 
-func (rc *RedisModel) Set(key, val string) error {
+func (rc *RedisModel) Del(key string) error {
+	c := rc.p.Get()
+	defer c.Close()
+	prefix := rc.prefix
+	_, err := c.Do("DEL", prefix+key)
+
+	Error(err)
+
+	return err
+}
+
+func (rc *RedisModel) Set(key, val string, expire int) error {
 	c := rc.p.Get()
 	defer c.Close()
 	prefix := rc.prefix
 
 	_, err := c.Do("SET", prefix+key, val)
 	Error(err)
+	if expire > 0 {
+		c.Do("EXPIRE", prefix+key, expire)
+	}
 
 	return err
 }
@@ -89,11 +103,14 @@ func (rc *RedisModel) Get(key string) string {
 	return val
 }
 
-func (rc *RedisModel) Lpush(key, val string) error {
+func (rc *RedisModel) Lpush(key, val string, expire int) error {
 	c := rc.p.Get()
 	defer c.Close()
 	prefix := rc.prefix
 	_, err := c.Do("lpush", prefix+key, val)
+	if expire > 0 {
+		c.Do("EXPIRE", prefix+key, expire)
+	}
 
 	Error(err)
 	return err
@@ -104,6 +121,46 @@ func (rc *RedisModel) Rpop(key string) string {
 	defer c.Close()
 	prefix := rc.prefix
 	val, err := redis.String(c.Do("rpop", prefix+key))
+
+	Error(err)
+	return val
+
+}
+
+func (rc *RedisModel) Sadd(key string, expire int, val ...string) error {
+	c := rc.p.Get()
+	defer c.Close()
+	prefix := rc.prefix
+
+	var err error
+	for _, v := range val {
+		_, err = c.Do("SADD", prefix+key, v)
+		Error(err)
+	}
+
+	if expire > 0 {
+		c.Do("EXPIRE", prefix+key, expire)
+	}
+
+	return err
+}
+
+func (rc *RedisModel) Smembers(key string) []string {
+	c := rc.p.Get()
+	defer c.Close()
+	prefix := rc.prefix
+	val, err := redis.Strings(c.Do("SMEMBERS", prefix+key))
+
+	Error(err)
+	return val
+
+}
+
+func (rc *RedisModel) Scard(key string) int {
+	c := rc.p.Get()
+	defer c.Close()
+	prefix := rc.prefix
+	val, err := redis.Int(c.Do("SCARD", prefix+key))
 
 	Error(err)
 	return val

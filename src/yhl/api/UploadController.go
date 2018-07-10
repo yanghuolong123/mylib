@@ -77,27 +77,23 @@ func (this *UploadController) WebUpload() {
 		this.SendResJsonp(101, "fail", err.Error())
 	}
 	defer f.Close()
-	//	fmt.Println("==== chunks:", chunks)
-	//	fmt.Println("==== chunk:", chunk)
 	ext := filepath.Ext(h.Filename)
 	filename = help.Md5(filename) + ext
 	prefix := "tmp/"
 	part := prefix + filename + "_" + chunk + ".part"
 	this.SaveToFile("file", part)
 	count, err := strconv.Atoi(chunks)
-	cache := help.Cache
-	cache.Incr(filename)
-	num, err := strconv.Atoi(string(cache.Get(filename).([]uint8)))
+	help.Redis.Sadd(filename, 600, chunk)
+	num := help.Redis.Scard(filename)
 	dir := "uploads/"
 	y, m, d := help.Date()
 	dir = dir + fmt.Sprintf("%d/%d/%d/", y, m, d)
-	//	fmt.Println("==== num:", num)
-	//	fmt.Println("==== count:", count)
-	//	fmt.Println("========== filename:", filename)
+	//fmt.Println("==== num:", num)
+	//fmt.Println("==== count:", count)
+	//fmt.Println("========== filename:", filename)
 	outfile := dir + fmt.Sprintf("%s%d", time.Now().Format(help.DatetimeNumFormat), help.RandNum(10000, 99999)) + ext
 	if num == count {
 		go func(prefix, filename, outDir, outfile string) {
-			cache.Delete(filename)
 			if !help.PathExist(outDir) {
 				os.MkdirAll(outDir, os.ModePerm)
 			}
@@ -124,10 +120,7 @@ func (this *UploadController) WebUpload() {
 
 		}(prefix, filename, dir, outfile)
 
-		cache.Delete(filename)
-	} else if num > count {
-		cache.Delete(filename)
-		this.SendResJsonp(101, "fail", "uplad fail, please upload again!")
+		help.Redis.Del(filename)
 	}
 
 	this.SendResJsonp(0, "ok", "/"+outfile)
