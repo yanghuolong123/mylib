@@ -81,7 +81,10 @@ func (this *UploadController) WebUpload() {
 	filename = help.Md5(filename) + ext
 	prefix := "tmp/"
 	part := prefix + filename + "_" + chunk + ".part"
-	this.SaveToFile("file", part)
+	err = this.SaveToFile("file", part)
+	if err != nil {
+		this.SendResJsonp(101, "fail", "uplad fail, please upload again!")
+	}
 	count, err := strconv.Atoi(chunks)
 	help.Redis.Sadd(filename, 600, chunk)
 	num := help.Redis.Scard(filename)
