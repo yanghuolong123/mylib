@@ -77,8 +77,17 @@ func (this *UploadController) WebUpload() {
 		this.SendResJsonp(101, "fail", err.Error())
 	}
 	defer f.Close()
+
+	dir := "uploads/"
+	y, m, d := help.Date()
+	dir = dir + fmt.Sprintf("%d/%d/%d/", y, m, d)
 	ext := filepath.Ext(h.Filename)
+	outfile := dir + fmt.Sprintf("%s%d", time.Now().Format(help.DatetimeNumFormat), help.RandNum(10000, 99999)) + ext
 	filename = help.Md5(filename) + ext
+	if help.Redis.Sismember(filename, chunk) {
+		this.SendResJsonp(0, "ok", "/"+outfile)
+	}
+
 	prefix := "tmp/"
 	part := prefix + filename + "_" + chunk + ".part"
 	err = this.SaveToFile("file", part)
@@ -88,13 +97,9 @@ func (this *UploadController) WebUpload() {
 	count, err := strconv.Atoi(chunks)
 	help.Redis.Sadd(filename, 600, chunk)
 	num := help.Redis.Scard(filename)
-	dir := "uploads/"
-	y, m, d := help.Date()
-	dir = dir + fmt.Sprintf("%d/%d/%d/", y, m, d)
 	//fmt.Println("==== num:", num)
 	//fmt.Println("==== count:", count)
 	//fmt.Println("========== filename:", filename)
-	outfile := dir + fmt.Sprintf("%s%d", time.Now().Format(help.DatetimeNumFormat), help.RandNum(10000, 99999)) + ext
 	if num == count {
 		go func(prefix, filename, outDir, outfile string) {
 			if !help.PathExist(outDir) {

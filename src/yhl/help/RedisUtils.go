@@ -166,3 +166,14 @@ func (rc *RedisModel) Scard(key string) int {
 	return val
 
 }
+
+func (rc *RedisModel) Sismember(key, val string) bool {
+	c := rc.p.Get()
+	defer c.Close()
+	prefix := rc.prefix
+	is, err := redis.Bool(c.Do("SISMEMBER", prefix+key, val))
+
+	Error(err)
+	return is
+
+}
