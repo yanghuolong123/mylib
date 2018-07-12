@@ -92,6 +92,7 @@ func (this *UploadController) WebUpload() {
 	part := prefix + filename + "_" + chunk + ".part"
 	err = this.SaveToFile("file", part)
 	if err != nil {
+		help.Error(err)
 		this.SendResJsonp(101, "fail", "uplad fail, please upload again!")
 	}
 	count, err := strconv.Atoi(chunks)
