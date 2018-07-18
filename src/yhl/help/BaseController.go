@@ -56,6 +56,12 @@ func (this *BaseController) SendRes(code int, msg string, data interface{}) {
 	this.StopRun()
 }
 
+func (this *BaseController) SendResData(m map[string]interface{}) {
+	this.Data["json"] = m
+	this.ServeJSON()
+	this.StopRun()
+}
+
 func (this *BaseController) SendResJsonp(code int, msg string, data interface{}) {
 	m := make(map[string]interface{})
 	m["code"] = code
