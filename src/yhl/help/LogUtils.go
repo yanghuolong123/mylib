@@ -22,7 +22,7 @@ func init() {
 }
 */
 
-func Log(filename string, info interface{}) {
+func Log(filename string, info interface{}, depth ...int) {
 	f := "./log/" + filename + "." + time.Now().Format(DateFormat) + ".log"
 	m := make(map[string]interface{})
 	m["filename"] = f
@@ -32,7 +32,11 @@ func Log(filename string, info interface{}) {
 
 	log := logs.NewLogger(10000)
 	log.SetLogger(logs.AdapterFile, string(jsonStr))
-	log.SetLogFuncCallDepth(3)
+	if len(depth) > 0 {
+		log.SetLogFuncCallDepth(depth[0])
+	} else {
+		log.SetLogFuncCallDepth(3)
+	}
 	log.EnableFuncCallDepth(true)
 	log.Async()
 

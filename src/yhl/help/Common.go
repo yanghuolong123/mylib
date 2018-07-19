@@ -36,7 +36,7 @@ func StructToMap(obj interface{}) map[string]interface{} {
 
 func Error(err error) {
 	if err != nil {
-		Log("error", err.Error())
+		Log("error", err.Error(), 4)
 	}
 }
 
