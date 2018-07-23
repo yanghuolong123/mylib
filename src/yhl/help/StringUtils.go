@@ -2,6 +2,7 @@ package help
 
 import (
 	"fmt"
+	"github.com/astaxie/beego"
 	"strconv"
 )
 
@@ -18,4 +19,8 @@ func StrToInt(num string) int {
 
 func ToStr(v interface{}) string {
 	return fmt.Sprintf("%v", v)
+}
+
+func SubStr(str string, start, length int) string {
+	return beego.Substr(str, start, length)
 }
