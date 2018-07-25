@@ -148,6 +148,9 @@ func (this *UploadController) WebUpload() {
 					if err == io.EOF {
 						os.Remove(infile)
 						break
+					} else if err != nil {
+						help.Error(err)
+						return
 					} else {
 						bWriter.Write(buffer[:readCount])
 					}
