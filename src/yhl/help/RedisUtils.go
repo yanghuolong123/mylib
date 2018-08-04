@@ -127,6 +127,16 @@ func (rc *RedisModel) Rpop(key string) string {
 
 }
 
+func (rc *RedisModel) Llen(key string) int {
+	c := rc.p.Get()
+	defer c.Close()
+	prefix := rc.prefix
+	val, err := redis.Int(c.Do("LLEN", prefix+key))
+
+	Error(err)
+	return val
+}
+
 func (rc *RedisModel) Sadd(key string, expire int, val ...string) error {
 	c := rc.p.Get()
 	defer c.Close()
