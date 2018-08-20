@@ -141,3 +141,9 @@ func (this *BaseController) IsMobile() bool {
 
 	return false
 }
+
+func (this *BaseController) Int(param string) int {
+	p, _ := this.GetInt(param)
+
+	return int(p)
+}
