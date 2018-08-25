@@ -51,7 +51,7 @@ func GetOpenId(c *context.Context, site string) (openid string) {
 	urlStr := url.QueryEscape(site + c.Input.URI())
 	if code := c.Input.Query("code"); code == "" {
 
-		codeUrl := "https://open.weixin.qq.com/connect/oauth2/authorize?appid=" + AppId + "&redirect_uri=" + urlStr + "&response_type=code&scope=snsapi_base&state=STATE#wechat_redirect"
+		codeUrl := "https://open.weixin.qq.com/connect/oauth2/authorize?appid=" + AppId + "&redirect_uri=" + urlStr + "&response_type=code&scope=snsapi_base&state=STATE&connect_redirect=1#wechat_redirect"
 
 		c.Redirect(302, codeUrl)
 
