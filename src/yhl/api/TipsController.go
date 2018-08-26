@@ -9,6 +9,10 @@ type TipsController struct {
 }
 
 func (this *TipsController) Tips() {
+	user := this.GetSession("user")
+	if user != nil {
+		this.Redirect("/", 302)
+	}
 	msg := this.GetString("msg")
 	tpl := this.GetString("tpl")
 	layout := this.GetString("layout")
