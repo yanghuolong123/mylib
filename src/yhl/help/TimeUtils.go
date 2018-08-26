@@ -11,6 +11,10 @@ const (
 	DatetimeNumFormat string = "20060102150405"
 )
 
+func TimeToStr(t time.Time, f string) string {
+	return t.Format(f)
+}
+
 func Date() (year, month, day int) {
 	t := time.Now()
 	year, m, day := t.Date()

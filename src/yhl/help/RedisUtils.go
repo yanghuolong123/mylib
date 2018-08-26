@@ -78,6 +78,20 @@ func (rc *RedisModel) Del(key string) error {
 	return err
 }
 
+func (rc *RedisModel) Incr(key string, num int, expire int) error {
+	c := rc.p.Get()
+	defer c.Close()
+	prefix := rc.prefix
+
+	_, err := c.Do("INCRBY", prefix+key, num)
+	Error(err)
+	if expire > 0 {
+		c.Do("EXPIRE", prefix+key, expire)
+	}
+
+	return err
+}
+
 func (rc *RedisModel) Set(key, val string, expire int) error {
 	c := rc.p.Get()
 	defer c.Close()
