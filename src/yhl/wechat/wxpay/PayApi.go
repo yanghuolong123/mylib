@@ -50,12 +50,21 @@ func JsPaySdk(prepayId string) map[string]interface{} {
 func GetOpenId(c *context.Context, site string) (openid string) {
 	urlStr := url.QueryEscape(site + c.Input.URI())
 	if code := c.Input.Query("code"); code == "" {
+		help.Log("wxpay", "urlStr:"+urlStr)
 
 		codeUrl := "https://open.weixin.qq.com/connect/oauth2/authorize?appid=" + AppId + "&redirect_uri=" + urlStr + "&response_type=code&scope=snsapi_base&state=STATE&connect_redirect=1#wechat_redirect"
 
 		c.Redirect(302, codeUrl)
 
 	} else {
+		cache := help.Cache
+		c := cache.Get(code)
+		if c != nil {
+			openid = string(c.([]uint8))
+			help.Log("wxpay", "openid:cache:"+code)
+			return
+		}
+
 		openidUrl := "https://api.weixin.qq.com/sns/oauth2/access_token?appid=" + AppId + "&secret=" + AppSecret + "&code=" + code + "&grant_type=authorization_code"
 
 		b := httplib.Get(openidUrl)
@@ -63,8 +72,11 @@ func GetOpenId(c *context.Context, site string) (openid string) {
 		b.ToJSON(&data)
 
 		help.Log("wxpay", data)
+		help.Log("wxpay", "code:"+code)
 		if v, ok := data["openid"]; ok {
 			openid = v.(string)
+			help.Log("wxpay", "openid:first:"+code)
+			cache.Put(code, openid, time.Duration(300)*time.Second)
 		}
 	}
 
