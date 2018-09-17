@@ -13,11 +13,12 @@ var (
 func init() {
 	host := beego.AppConfig.String("redis.host")
 	port := beego.AppConfig.String("redis.port")
+	prefix := beego.AppConfig.String("redis.key.prefix")
 	if host == "" || port == "" {
 		return
 	}
 
-	conn := `{"conn":"` + host + `:` + port + `", "dbNum":"0"}`
+	conn := `{"conn":"` + host + `:` + port + `", "key":"` + prefix + `", "dbNum":"0"}`
 	var err error
 	Cache, err = cache.NewCache("redis", conn)
 	Error(err)
